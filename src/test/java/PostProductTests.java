@@ -14,13 +14,9 @@ import static io.restassured.RestAssured.when;
 public class PostProductTests {
     Product product;
     Integer id;
-    static Properties properties = new Properties();
 
     @BeforeEach
-    void setUp() throws IOException {
-        properties.load(new FileInputStream("src/test/resources/application.properties"));
-        properties.getProperty("baseURL");
-        RestAssured.baseURI = properties.getProperty("baseURL");
+    void setUp() {
     }
 
     @Test
@@ -33,11 +29,165 @@ public class PostProductTests {
                 .build();
         id = given()
                 .body(product.toString())
-                .header("content-type","application/json")
+                .header("content-type", "application/json")
                 .log()
                 .all()
                 .expect()
                 .statusCode(201)
+                .when()
+                .post("http://80.78.248.82:8189/market/api/v1/products")
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void postProductPriceUnderZeroTest() {
+        product = Product.builder()
+                .price(-10)
+                .title("Banana")
+                .categoryTitle("Food")
+                .id(null)
+                .build();
+        id = given()
+                .body(product.toString())
+                .header("content-type", "application/json")
+                .log()
+                .all()
+                .expect()
+                .statusCode(401)
+                .when()
+                .post("http://80.78.248.82:8189/market/api/v1/products")
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void postProductPriceZeroFirstTest() {
+        product = Product.builder()
+                .price(010)
+                .title("Banana")
+                .categoryTitle("Food")
+                .id(null)
+                .build();
+        id = given()
+                .body(product.toString())
+                .header("content-type", "application/json")
+                .log()
+                .all()
+                .expect()
+                .statusCode(401)
+                .when()
+                .post("http://80.78.248.82:8189/market/api/v1/products")
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void postProductPriceZeroTest() {
+        product = Product.builder()
+                .price(0)
+                .title("Banana")
+                .categoryTitle("Food")
+                .id(null)
+                .build();
+        id = given()
+                .body(product.toString())
+                .header("content-type", "application/json")
+                .log()
+                .all()
+                .expect()
+                .statusCode(401)
+                .when()
+                .post("http://80.78.248.82:8189/market/api/v1/products")
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void postProductPriceNullTest() {
+        product = Product.builder()
+                .price(null)
+                .title("Banana")
+                .categoryTitle("Food")
+                .id(null)
+                .build();
+        id = given()
+                .body(product.toString())
+                .header("content-type", "application/json")
+                .log()
+                .all()
+                .expect()
+                .statusCode(401)
+                .when()
+                .post("http://80.78.248.82:8189/market/api/v1/products")
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void postProductPriceLARGETest() {
+        product = Product.builder()
+                .price(100_000_000)
+                .title("Banana")
+                .categoryTitle("Food")
+                .id(null)
+                .build();
+        id = given()
+                .body(product.toString())
+                .header("content-type", "application/json")
+                .log()
+                .all()
+                .expect()
+                .statusCode(201)
+                .when()
+                .post("http://80.78.248.82:8189/market/api/v1/products")
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void postProductTitleUpperMiXEdLowerGETest() {
+        product = Product.builder()
+                .price(1234)
+                .title("banana BANANA baNANa")
+                .categoryTitle("Food")
+                .id(null)
+                .build();
+        id = given()
+                .body(product.toString())
+                .header("content-type", "application/json")
+                .log()
+                .all()
+                .expect()
+                .statusCode(201)
+                .when()
+                .post("http://80.78.248.82:8189/market/api/v1/products")
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void postProductCategoryTitleRandomTest() {
+        product = Product.builder()
+                .price(1234)
+                .title("Banana")
+                .categoryTitle("Fasdsad")
+                .id(null)
+                .build();
+        id = given()
+                .body(product.toString())
+                .header("content-type", "application/json")
+                .log()
+                .all()
+                .expect()
+                .statusCode(401)
                 .when()
                 .post("http://80.78.248.82:8189/market/api/v1/products")
                 .prettyPeek()
