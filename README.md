@@ -1,2 +1,2 @@
-![](main/resources/Screenshot_12.png)
+![](src/main/resources/Screenshot_12.png)
 Отрефакторить тесты для GET и POST с использованием объектов для процессов сериализации/десериализации
