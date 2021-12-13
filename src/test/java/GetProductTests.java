@@ -22,9 +22,9 @@ public class GetProductTests {
     @Test
     void getProductPositiveTest() {
         when()
-                .get("/products/17856")
+                .get("/products/17713")
                 .prettyPeek()
                 .then()
-                .statusCode(404);
+                .statusCode(200);
     }
 }

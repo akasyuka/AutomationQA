@@ -1,4 +1,7 @@
+import com.github.javafaker.Faker;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,8 +13,11 @@ import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PostProductTests {
+    Faker faker = new Faker();
     Product product;
     Integer id;
 
@@ -23,12 +29,37 @@ public class PostProductTests {
     void postProductPositiveTest() {
         product = Product.builder()
                 .price(100)
-                .title("Banana")
+                .title(faker.food().fruit())
                 .categoryTitle("Food")
                 .id(null)
                 .build();
         id = given()
-                .body(product.toString())
+                .body(product)
+                .header("content-type", "application/json")
+                .log()
+                .all()
+                .expect()
+                .statusCode(201)
+                .body("price", equalTo(product.getPrice()))
+                .body("title", equalTo(product.getTitle()))
+                .body("categoryTitle", equalTo(product.getCategoryTitle()))
+                .when()
+                .post("http://80.78.248.82:8189/market/api/v1/products")
+                .prettyPeek()
+                .jsonPath()
+                .get("id");
+    }
+
+    @Test
+    void postProductWithDifferentAssertsPositiveTest() {
+        product = Product.builder()
+                .price(100)
+                .title("Banana")
+                .categoryTitle("Food")
+                .id(null)
+                .build();
+        Product response = given()
+                .body(product)
                 .header("content-type", "application/json")
                 .log()
                 .all()
@@ -37,8 +68,13 @@ public class PostProductTests {
                 .when()
                 .post("http://80.78.248.82:8189/market/api/v1/products")
                 .prettyPeek()
-                .jsonPath()
-                .get("id");
+                .body()
+                .as(Product.class);
+        id = response.getId();
+        assertThat(response.getId(), is(not(nullValue())));
+        assertThat(response.getPrice(), equalTo(product.getPrice()));
+        assertThat(response.getTitle(), equalTo(product.getTitle()));
+        assertThat(response.getCategoryTitle(), equalTo(product.getCategoryTitle()));
     }
 
     @Test
@@ -50,7 +86,7 @@ public class PostProductTests {
                 .id(null)
                 .build();
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("content-type", "application/json")
                 .log()
                 .all()
@@ -72,7 +108,7 @@ public class PostProductTests {
                 .id(null)
                 .build();
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("content-type", "application/json")
                 .log()
                 .all()
@@ -94,7 +130,7 @@ public class PostProductTests {
                 .id(null)
                 .build();
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("content-type", "application/json")
                 .log()
                 .all()
@@ -116,7 +152,7 @@ public class PostProductTests {
                 .id(null)
                 .build();
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("content-type", "application/json")
                 .log()
                 .all()
@@ -138,7 +174,7 @@ public class PostProductTests {
                 .id(null)
                 .build();
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("content-type", "application/json")
                 .log()
                 .all()
@@ -160,7 +196,7 @@ public class PostProductTests {
                 .id(null)
                 .build();
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("content-type", "application/json")
                 .log()
                 .all()
@@ -174,7 +210,7 @@ public class PostProductTests {
     }
 
     @Test
-    void postProductCategoryTitleRandomTest() {
+    void postProductCategoryTitleNonExistTest() {
         product = Product.builder()
                 .price(1234)
                 .title("Banana")
@@ -182,12 +218,12 @@ public class PostProductTests {
                 .id(null)
                 .build();
         id = given()
-                .body(product.toString())
+                .body(product)
                 .header("content-type", "application/json")
                 .log()
                 .all()
                 .expect()
-                .statusCode(401)
+                .statusCode(500)
                 .when()
                 .post("http://80.78.248.82:8189/market/api/v1/products")
                 .prettyPeek()
