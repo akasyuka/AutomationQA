@@ -1,4 +1,3 @@
-![](src/main/resources/Screenshot_12.png)
-Отрефакторить тесты для GET и POST с использованием объектов для процессов сериализации/десериализации
-
-PostProductTests позитивный метод сравнивает отправленные данные и полученные, поэтому нет смысла в каждом тесте делать assertThat.
+![Description](src/main/resources/Screenshot_12.png "Title")
+1. Сделать рефакторинг существующих тестов
+2. Добавить тесты на PUT /products/{id}
