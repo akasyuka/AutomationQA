@@ -21,53 +21,45 @@ import static org.hamcrest.CoreMatchers.*;
 public class PostProductTests extends BaseTests {
     Faker faker = new Faker();
     Product product;
+    Product.ProductBuilder productBuilder;
     Integer id;
     RequestSpecification postProductRequestSpec;
     ResponseSpecification postProductResponseSpec;
+    ResponseSpecification postProductResponseSpecNotFound;
 
 
     @BeforeEach
     void setUp() {
-//TODO:
-
-//        product = Product.builder()
-//                .price(100)
-//                .title(faker.food().fruit())
-//                .categoryTitle(FOOD.getName())
-//                .id(null)
-//                .build();
-//        postProductRequestSpec = new RequestSpecBuilder()
-//                .setBody(product)
-//                .setContentType(ContentType.JSON)
-//                .build();
-//        postProductResponseSpec = new ResponseSpecBuilder()
-//                .expectStatusCode(201)
-//                .expectStatusLine("HTTP/1.1 201 ")
-//                .expectBody("price", equalTo(product.getPrice()))
-//                .expectBody("title", equalTo(product.getTitle()))
-//                .expectBody("categoryTitle", equalTo(product.getCategoryTitle()))
-//                .build();
-    }
-
-    @Test
-    void postProductPositiveTest() {
-        product = Product.builder()
+        productBuilder = Product.builder()
                 .price(100)
-                .title(faker.food().fruit())
-                .categoryTitle(FOOD.getName())
-                .id(null)
-                .build();
+                .title(faker.food().dish())
+                .categoryTitle(FOOD.getName());
+
+        product = productBuilder.build();
+
         postProductRequestSpec = new RequestSpecBuilder()
                 .setBody(product)
                 .setContentType(ContentType.JSON)
                 .build();
+
         postProductResponseSpec = new ResponseSpecBuilder()
                 .expectStatusCode(201)
                 .expectStatusLine("HTTP/1.1 201 ")
-                .expectBody("price", equalTo(product.getPrice()))
                 .expectBody("title", equalTo(product.getTitle()))
+                .expectBody("price", equalTo(product.getPrice()))
                 .expectBody("categoryTitle", equalTo(product.getCategoryTitle()))
                 .build();
+        postProductResponseSpecNotFound = new ResponseSpecBuilder()
+                .expectStatusCode(401)
+                .expectStatusLine("HTTP/1.1 401 ")
+                .expectBody("title", equalTo(product.getTitle()))
+                .expectBody("price", equalTo(product.getPrice()))
+                .expectBody("categoryTitle", equalTo(product.getCategoryTitle()))
+                .build();
+    }
+
+    @Test
+    void postProductPositiveTest() {
         id = given(postProductRequestSpec, postProductResponseSpec)
                 .post(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
@@ -77,12 +69,6 @@ public class PostProductTests extends BaseTests {
 
     @Test
     void postProductWithDifferentAssertsPositiveTest() {
-        product = Product.builder()
-                .price(100)
-                .title("Banana")
-                .categoryTitle(FOOD.getName())
-                .id(null)
-                .build();
         postProductRequestSpec = new RequestSpecBuilder()
                 .setBody(product)
                 .setContentType(ContentType.JSON)
@@ -104,24 +90,13 @@ public class PostProductTests extends BaseTests {
 
     @Test
     void postProductPriceUnderZeroTest() {
-        product = Product.builder()
-                .price(-10)
-                .title("Banana")
-                .categoryTitle(FOOD.getName())
-                .id(null)
-                .build();
-        postProductRequestSpec = new RequestSpecBuilder()
-                .setBody(product)
-                .setContentType(ContentType.JSON)
-                .build();
-        id = given(postProductRequestSpec)
-                .expect()
-                .statusCode(401)
-                .when()
+        Product product = productBuilder.price(-10).build();
+        id = given(postProductRequestSpec, postProductResponseSpec)
                 .post(POST_PRODUCT_ENDPOINT)
                 .prettyPeek()
                 .jsonPath()
                 .get("id");
+//        postProductPositiveAssert(product, response);
     }
 
     @Test
