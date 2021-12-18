@@ -1,6 +1,8 @@
 package product;
 
+import dto.Product;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +10,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import static asserts.IsCategoryExists.isCategoryExists;
 import static io.restassured.RestAssured.when;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GetProductTests {
     static Properties properties = new Properties();
@@ -22,10 +26,11 @@ public class GetProductTests {
 
     @Test
     void getProductPositiveTest() {
-        when()
+        Product response = when()
                 .get("/products/17713")
                 .prettyPeek()
-                .then()
-                .statusCode(200);
+                        .body()
+                                .as(Product.class);
+        assertThat(response.getCategoryTitle(), isCategoryExists());
     }
 }

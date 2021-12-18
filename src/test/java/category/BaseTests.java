@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import static io.restassured.filter.log.LogDetail.*;
+import static org.hamcrest.Matchers.containsStringIgnoringCase;
 import static org.hamcrest.Matchers.lessThan;
 
 public abstract class BaseTests {
@@ -22,6 +23,7 @@ public abstract class BaseTests {
     static ResponseSpecification responseSpecification;
     public static ResponseSpecification deleteResponseSpec;
     static ResponseSpecification categoriesResponseSpec;
+    static ResponseSpecification categoriesResponseSpecNotFound;
 
     @BeforeAll
     static void beforeAll() throws IOException {
@@ -41,6 +43,14 @@ public abstract class BaseTests {
                 .log(ALL)
                 .expectContentType(ContentType.JSON)
                 .expectStatusCode(200)
+                .expectStatusLine(containsStringIgnoringCase("HTTP/1.1 200"))
+                .expectResponseTime(lessThan(4L), TimeUnit.SECONDS)
+                .build();
+        categoriesResponseSpecNotFound =new ResponseSpecBuilder()
+                .log(ALL)
+                .expectContentType(ContentType.JSON)
+                .expectStatusCode(404)
+                .expectStatusLine(containsStringIgnoringCase("HTTP/1.1 404"))
                 .expectResponseTime(lessThan(4L), TimeUnit.SECONDS)
                 .build();
         deleteResponseSpec = new ResponseSpecBuilder()

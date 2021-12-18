@@ -4,8 +4,10 @@ import dto.Category;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
+import static asserts.IsCategoryExists.isCategoryExists;
 import static endpoints.Endpoints.CATEGORY_ENDPOINT;
 import static enums.CategoryType.FOOD;
+import static enums.CategoryType.FURNITURE;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -57,19 +59,24 @@ public class GetCategoryTests extends BaseTests {
     }
 
     @Test
-    void getCategoryWithAssertsAfterTestForResponseTest() {
-        Category response =given()
-                .response()
-                .spec(categoriesResponseSpec)
-                .when()
-                .get(CATEGORY_ENDPOINT, FOOD.getId())
-                .prettyPeek()
-                .body()
-                .as(Category.class);
+    void getCategoryWithAssertsAfterTestTest() {
+        Category response =
+                given()
+                        .response()
+                        .spec(categoriesResponseSpecNotFound)
+                        . when()
+                        .get(CATEGORY_ENDPOINT,888)
+                        .prettyPeek()
+                        .body()
+                        .as(Category.class);
+
         response.getProducts().forEach(
-                e -> assertThat(e.getCategoryTitle(), equalTo(FOOD.getName()))
+                e -> {
+                    assertThat(e.getCategoryTitle(), isCategoryExists());
+                    assertThat(e.getCategoryTitle(), equalTo(FURNITURE.getName()));
+                }
         );
-        assertThat(response.getTitle(), equalTo(FOOD.getName()));
-        assertThat(response.getId(), equalTo(FOOD.getId()));
+        assertThat(response.getTitle(), equalTo(FURNITURE.getName()));
+        assertThat(response.getId(), equalTo(FURNITURE.getId()));
     }
 }

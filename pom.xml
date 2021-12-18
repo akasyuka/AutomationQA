@@ -17,6 +17,8 @@
         <rest-assured.version>4.4.0</rest-assured.version>
         <lombok.version>1.18.22</lombok.version>
         <slf4j-api.version>1.7.32</slf4j-api.version>
+        <hamcrest.version>2.1</hamcrest.version>
+        <java-hamcrest.version>2.0.0.0</java-hamcrest.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
@@ -67,5 +69,18 @@
             <artifactId>javafaker</artifactId>
             <version>${javafaker.version}</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.hamcrest</groupId>-->
+<!--            <artifactId>hamcrest</artifactId>-->
+<!--            <version>${hamcrest.version}</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.hamcrest/java-hamcrest -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>java-hamcrest</artifactId>
+            <version>${java-hamcrest.version}</version>
+        </dependency>
+
     </dependencies>
 </project>
