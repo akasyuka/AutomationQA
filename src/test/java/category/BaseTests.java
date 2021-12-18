@@ -39,14 +39,14 @@ public abstract class BaseTests {
         responseSpecification = new ResponseSpecBuilder()
                 .expectStatusCode(200)
                 .build();
-        categoriesResponseSpec =new ResponseSpecBuilder()
+        categoriesResponseSpec = new ResponseSpecBuilder()
                 .log(ALL)
                 .expectContentType(ContentType.JSON)
                 .expectStatusCode(200)
                 .expectStatusLine(containsStringIgnoringCase("HTTP/1.1 200"))
                 .expectResponseTime(lessThan(4L), TimeUnit.SECONDS)
                 .build();
-        categoriesResponseSpecNotFound =new ResponseSpecBuilder()
+        categoriesResponseSpecNotFound = new ResponseSpecBuilder()
                 .log(ALL)
                 .expectContentType(ContentType.JSON)
                 .expectStatusCode(404)

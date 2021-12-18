@@ -64,8 +64,8 @@ public class GetCategoryTests extends BaseTests {
                 given()
                         .response()
                         .spec(categoriesResponseSpecNotFound)
-                        . when()
-                        .get(CATEGORY_ENDPOINT,888)
+                        .when()
+                        .get(CATEGORY_ENDPOINT, 888)
                         .prettyPeek()
                         .body()
                         .as(Category.class);

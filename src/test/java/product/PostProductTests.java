@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 public class PostProductTests extends BaseTests {
     Faker faker = new Faker();
     Product product;
-//    Product.ProductBuilder productBuilder;
+    //    Product.ProductBuilder productBuilder;
     Integer id;
     RequestSpecification postProductRequestSpec;
     ResponseSpecification postProductResponseSpec;
@@ -348,6 +348,7 @@ public class PostProductTests extends BaseTests {
                 .jsonPath()
                 .get("id");
     }
+
     //401 or 400
     @Test
     void postProductPriceStringTest() {

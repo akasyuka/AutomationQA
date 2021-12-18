@@ -10,7 +10,8 @@ public enum CategoryType {
     private int id;
     @Getter
     private String name;
-    CategoryType( int id,  String name) {
+
+    CategoryType(int id, String name) {
         this.id = id;
         this.name = name;
     }

@@ -82,6 +82,7 @@ public class PutProductTests extends BaseTests {
                 .get("id");
         //
     }
+
     @Test
     void putProductPriceLARGETest() {
         //Refactoring
@@ -167,7 +168,6 @@ public class PutProductTests extends BaseTests {
                     .prettyPeek()
                     .then()
                     .statusCode(200);
-
         }
     }
 }
