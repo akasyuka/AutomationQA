@@ -3,6 +3,7 @@ package product;
 import category.BaseTests;
 import com.github.javafaker.Faker;
 import dto.Product;
+import io.qameta.allure.*;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
@@ -18,6 +19,9 @@ import static enums.CategoryType.FOOD;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
+@Epic("Tests for products")
+@Story("Put Product tests")
+@Severity(SeverityLevel.MINOR)
 public class PutProductTests extends BaseTests {
     Faker faker = new Faker();
     Product product;
@@ -56,6 +60,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Вставить продукт, позитивная проверка")
     void putProductPositiveTest() {
         //Refactoring
         product = Product.builder()
@@ -84,6 +89,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Вставить продукт, позитивная проверка, цена 9 знаков")
     void putProductPriceLARGETest() {
         //Refactoring
         product = Product.builder()
@@ -112,6 +118,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Вставить продукт, позитивная проверка, не существующая категория")
     void putProductCategoryTitleNonExistTest() {
         product = Product.builder()
                 .price(1234)
@@ -134,6 +141,7 @@ public class PutProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Вставить продукт, позитивная проверка, название длинное+разный регистр")
     void putProductTitleUpperMiXEdLowerGETest() {
         //Refactoring
         product = Product.builder()

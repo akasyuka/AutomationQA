@@ -1,6 +1,8 @@
 package product;
 
+import category.BaseTests;
 import dto.Product;
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +16,10 @@ import static asserts.IsCategoryExists.isCategoryExists;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class GetProductTests {
+@Epic("Tests for products")
+@Story("Get Product tests")
+@Severity(SeverityLevel.CRITICAL)
+public class GetProductTests extends BaseTests {
     static Properties properties = new Properties();
 
     @BeforeEach
@@ -25,6 +30,7 @@ public class GetProductTests {
     }
 
     @Test
+    @Description("Получить продукт 17713 с проверкой обычного типа")
     void getProductPositiveTest() {
         Product response = when()
                 .get("/products/17713")

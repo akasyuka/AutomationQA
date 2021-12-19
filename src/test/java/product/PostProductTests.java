@@ -3,6 +3,7 @@ package product;
 import category.BaseTests;
 import com.github.javafaker.Faker;
 import dto.Product;
+import io.qameta.allure.*;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
@@ -19,6 +20,9 @@ import static enums.CategoryType.FOOD;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
+@Epic("Tests for products")
+@Story("Post Product tests")
+@Severity(SeverityLevel.NORMAL)
 public class PostProductTests extends BaseTests {
     Faker faker = new Faker();
     Product product;
@@ -61,6 +65,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, позитивная проверка")
     void postProductPositiveTest() {
         //Refactoring
         product = Product.builder()
@@ -89,6 +94,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, позитивная проверка с пакетом обычных ассертов")
     void postProductWithDifferentAssertsPositiveTest() {
         //Refactoring
         product = Product.builder()
@@ -118,6 +124,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, негативная проверка, цена ниже 0")
     void postProductPriceUnderZeroTest() {
 // Refactoring version
 //        product.setPrice(-10);
@@ -160,6 +167,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, негативная проверка, цена начинается с 0")
     void postProductPriceZeroFirstTest() {
         //Refactoring
         product = Product.builder()
@@ -188,6 +196,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, негативная проверка, цена равняется 0")
     void postProductPriceZeroTest() {
         //Refactoring
         product = Product.builder()
@@ -216,6 +225,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, негативная проверка, цена не указанна")
     void postProductPriceNullTest() {
         //Refactoring
         product = Product.builder()
@@ -244,6 +254,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, позитивная проверка, цена 9 знаков")
     void postProductPriceLARGETest() {
         //Refactoring
         product = Product.builder()
@@ -272,6 +283,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, позитивная проверка, название длинное+разный регистр")
     void postProductTitleUpperMiXEdLowerGETest() {
         //Refactoring
         product = Product.builder()
@@ -300,6 +312,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, негативная проверка, название категории не существует")
     void postProductCategoryTitleNonExistTest() {
         product = Product.builder()
                 .price(1234)
@@ -322,6 +335,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, негативная проверка, название не указанно")
     void postProductTitleNullTest() {
         //Refactoring
         product = Product.builder()
@@ -351,6 +365,7 @@ public class PostProductTests extends BaseTests {
 
     //401 or 400
     @Test
+    @Description("Отправить продукт, негативная проверка, цена String")
     void postProductPriceStringTest() {
         //Refactoring
         product = Product.builder()
@@ -379,6 +394,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, позитивная проверка, цена float")
     void postProductPriceFloatTest() {
         //Refactoring
         product = Product.builder()
@@ -407,6 +423,7 @@ public class PostProductTests extends BaseTests {
     }
 
     @Test
+    @Description("Отправить продукт, позитивная проверка, название категории не зависит от регистра")
     void postProductCategoryTitleAnyRegister() {
         //Refactoring
         product = Product.builder()
