@@ -23,17 +23,15 @@ import static org.hamcrest.Matchers.lessThan;
 public abstract class BaseTests {
     static Properties properties = new Properties();
     static RequestSpecification logRequestSpecification;
-    static ResponseSpecification responseSpecification;
-    public static ResponseSpecification deleteResponseSpec;
-    static ResponseSpecification categoriesResponseSpec;
-    static ResponseSpecification categoriesResponseSpecNotFound;
+    protected static ResponseSpecification deleteResponseSpec;
+    protected static ResponseSpecification categoriesResponseSpec;
+    protected static ResponseSpecification categoriesResponseSpecNotFound;
 
     @BeforeAll
     static void beforeAll() throws IOException {
         RestAssured.filters(new AllureRestAssured());
         properties.load(new FileInputStream("src/test/resources/application.properties"));
         RestAssured.baseURI = properties.getProperty("baseURL");
-
         setAllureEnvironment();
 
         logRequestSpecification = new RequestSpecBuilder()
@@ -42,28 +40,24 @@ public abstract class BaseTests {
                 .log(BODY)
                 .log(HEADERS)
                 .build();
-        responseSpecification = new ResponseSpecBuilder()
-                .expectStatusCode(200)
-                .build();
+        RestAssured.requestSpecification = logRequestSpecification;
         categoriesResponseSpec = new ResponseSpecBuilder()
-                .log(ALL)
                 .expectContentType(ContentType.JSON)
                 .expectStatusCode(200)
                 .expectStatusLine(containsStringIgnoringCase("HTTP/1.1 200"))
                 .expectResponseTime(lessThan(4L), TimeUnit.SECONDS)
                 .build();
         categoriesResponseSpecNotFound = new ResponseSpecBuilder()
-                .log(ALL)
                 .expectContentType(ContentType.JSON)
                 .expectStatusCode(404)
                 .expectStatusLine(containsStringIgnoringCase("HTTP/1.1 404"))
                 .expectResponseTime(lessThan(4L), TimeUnit.SECONDS)
                 .build();
         deleteResponseSpec = new ResponseSpecBuilder()
+                .expectContentType(ContentType.JSON)
+                .expectStatusCode(200)
                 .expectContentType("")
                 .build();
-        RestAssured.requestSpecification = logRequestSpecification;
-        RestAssured.responseSpecification = responseSpecification;
     }
 
     protected static void setAllureEnvironment() {
